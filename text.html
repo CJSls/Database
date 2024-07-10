@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Text Example</title>
+    <style>
+        #text {
+            display: inline-block;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div id="text">This is the text that will be edited.</div>
+    <button id="editButton">Edit</button>
+    <script>
+        const textElement = document.getElementById('text');
+        const editButton = document.getElementById('editButton');
+
+        editButton.addEventListener('click', () => {
+            // Create an input element with the current text
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.value = textElement.innerText;
+            input.id = 'textInput';
+
+            // Replace the text element with the input element
+            textElement.replaceWith(input);
+
+            // Change button text to 'Save'
+            editButton.innerText = 'Save';
+
+            // Change the event listener to handle saving the input value
+            editButton.removeEventListener('click', this);
+            editButton.addEventListener('click', saveText);
+        });
+
+        function saveText() {
+            const input = document.getElementById('textInput');
+            const newText = input.value;
+
+            // Create a new text element with the updated text
+            const newTextElement = document.createElement('div');
+            newTextElement.id = 'text';
+            newTextElement.innerText = newText;
+
+            // Replace the input element with the new text element
+            input.replaceWith(newTextElement);
+
+            // Change button text back to 'Edit'
+            editButton.innerText = 'Edit';
+
+            // Change the event listener back to handle editing the text
+            editButton.removeEventListener('click', saveText);
+            editButton.addEventListener('click', () => {
+                const input = document.createElement('input');
+                input.type = 'text';
+                input.value = newTextElement.innerText;
+                input.id = 'textInput';
+
+                newTextElement.replaceWith(input);
+
+                editButton.innerText = 'Save';
+                editButton.removeEventListener('click', this);
+                editButton.addEventListener('click', saveText);
+            });
+        }
+    </script>
+</body>
+</html>
